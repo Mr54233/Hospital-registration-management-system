@@ -1,0 +1,17 @@
+{
+  "name": "frond-end",
+  "version": "1.0.0",
+  "description": "user side",
+  "main": "index.js",
+  "devDependencies": {
+    "coffee-script": "^1.12.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "us"
+  ],
+  "author": "54",
+  "license": "ISC"
+}
