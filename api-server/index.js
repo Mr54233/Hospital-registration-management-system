@@ -14,4 +14,5 @@ const userRouter = require("./router/user");
 app.use("/api", userRouter);
 
 app.get("/", (req, res) => res.send("Hello World!"));
+
 app.listen(port, () => console.log(`http://localhost:${port}`));
