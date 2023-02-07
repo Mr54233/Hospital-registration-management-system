@@ -13,10 +13,10 @@ app.use(express.urlencoded({ extended: false }));
 
 // 挂载和配置JWT 中间件
 
-// 1. 设置密钥
+// 设置密钥
 const secretKey = "hrms";
 
-// 2. 配置express-jwt
+// 配置express-jwt
 // unless() ; 配置那些地址的请求不需要解密来验证身份
 app.use(
 	expressjwt({ secret: secretKey, algorithms: ["HS256"] }).unless({
