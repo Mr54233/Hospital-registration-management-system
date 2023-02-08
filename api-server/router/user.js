@@ -14,5 +14,8 @@ router.post("/regUser", handler.regUser);
 // 登录
 router.post("/login", handler.login);
 
+// 添加信息
+router.put("/addMsg", handler.addMsg)
+
 // 将路由对象共享出去
 module.exports = router;
