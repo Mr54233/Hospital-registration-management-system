@@ -74,15 +74,25 @@ exports.login = (req, res) => {
 	// db.Query
 };
 
-// 添加信息的处理函数
+// 添加/修改 信息的处理函数
 exports.addMsg = (req, res) => {
 	// res.send(req.body)
 	let token = req.headers.authorization.split(" ")[1];
 	// res.send(token);
 	JWT.verify(token, secretKey, (err, decoded) => {
 		// res.send(decoded.name)
-		if(decoded.name){
-			
+		if (decoded.name) {
+			// let sql = `insert into user (usex,uage,uphone) value (${req.body.sex},${req.body.age},${req.body.phone}) select (usex,uage,uphone) from user where uname = ${decoded.name}`;
+			let sql = `update user set usex=${req.body.sex},uage=${req.body.age},uphone=${req.body.phone} where uname = ${decoded.name}`;
+			db.Query(sql).then((data) => {
+				// console.log(data);
+				res.send(data);
+			});
+		} else {
+			res.send({
+				status:400,
+				message:'用户不存在'
+			})
 		}
 	});
 };
