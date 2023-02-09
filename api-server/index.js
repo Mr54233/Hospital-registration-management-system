@@ -20,13 +20,17 @@ const secretKey = "hrms";
 // unless() ; 配置那些地址的请求不需要解密来验证身份
 app.use(
 	expressjwt({ secret: secretKey, algorithms: ["HS256"] }).unless({
-		path: ["/api/login", "/api/regUser", "/api/getUser"],
+		path: ["/user/login", "/user/regUser", "/user/getUser"],
 	})
 );
 
 // 导入并注册用户路由模块
 const userRouter = require("./router/user");
-app.use("/api", userRouter);
+app.use("/user", userRouter);
+
+// 挂号模块
+const reg = require("./router/registed");
+app.use("/reg", reg);
 
 // 错误处理
 app.use((err, req, res, next) => {
