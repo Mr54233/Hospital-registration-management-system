@@ -29,7 +29,7 @@ const userRouter = require("./router/user");
 app.use("/user", userRouter);
 
 // 挂号模块
-const reg = require("./router/registed");
+const reg = require("./router/registered");
 app.use("/reg", reg);
 
 // 错误处理

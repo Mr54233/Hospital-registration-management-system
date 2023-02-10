@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 // 导入处理模块
-const handler = require("../router_handler/registed");
+const handler = require("../router_handler/registered");
 
 // 查询科室
 router.get("/getDepart", handler.getDepart);
