@@ -34,3 +34,16 @@ exports.regMsg = (req, res) => {
 		});
 	});
 };
+
+// 获取挂号信息
+exports.getReg = (req, res) => {
+	let token = req.headers.authorization.split(" ")[1];
+	// res.send(token)
+	JWT.verify(token, secretKey, (err, decoded) => {
+		// res.send(decoded)
+		let sql = `select * from registered where rusername = ${decoded.name}`
+		db.Query(sql).then(data=>{
+			res.send(data)
+		})
+	});
+};

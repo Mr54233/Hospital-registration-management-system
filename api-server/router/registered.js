@@ -11,5 +11,8 @@ router.get("/getDepart", handler.getDepart);
 // 挂号模块
 router.post("/regMsg", handler.regMsg);
 
+// 查询挂号信息
+router.get("/getReg", handler.getReg);
+
 // 将路由对象共享出去
 module.exports = router;
