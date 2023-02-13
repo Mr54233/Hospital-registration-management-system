@@ -4,6 +4,7 @@
 
 const db = require("../db/db");
 const JWT = require("jsonwebtoken");
+const { stack } = require("../router/user");
 
 const secretKey = "hrms";
 
@@ -47,3 +48,14 @@ exports.getReg = (req, res) => {
 		})
 	});
 };
+
+// 删除挂号信息
+exports.delReg = (req,res)=>{
+	let token = req.headers.authorization.split(" ")[1];
+	JWT.verify(token,secretKey,(err,decoded)=>{
+		let sql = `update registered set del = 0 where rusername = ${decoded.name}`
+		db.Query(sql).then(data=>{
+			res.send(data)
+		})
+	})
+}

@@ -14,5 +14,8 @@ router.post("/regMsg", handler.regMsg);
 // 查询挂号信息
 router.get("/getReg", handler.getReg);
 
+// 删除挂号信息
+router.post("/delReg",handler.delReg)
+
 // 将路由对象共享出去
 module.exports = router;
