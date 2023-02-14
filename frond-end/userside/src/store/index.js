@@ -1,14 +1,22 @@
-import { createStore } from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-export default createStore({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
-})
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+	state: {
+		theme: "chalk",
+	},
+	mutations: {
+		changeTheme(state) {
+			if (state.theme === "chalk") {
+				// state.theme = 'vintage'
+				state.theme = "westeros";
+			} else {
+				state.theme = "chalk";
+			}
+		},
+	},
+	actions: {},
+	modules: {},
+});
