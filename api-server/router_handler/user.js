@@ -19,25 +19,32 @@ exports.getUser = (req, res) => {
 
 // 注册用户的处理函数
 exports.regUser = (req, res) => {
-	let sql = `select * from user where uname = '${req.body.name}'`;
-	let sql2 = `insert into user (uname,upassword) value ('${req.body.name}','${req.body.password}')`;
-	db.Query(sql).then((data) => {
-		// res.send(data[0]);
-		if (data[0] != undefined) {
-			res.send({
-				status: 401,
-				message: "注册失败,姓名已被注册",
-			});
-		} else {
-			db.Query(sql2).then((data) => {
+	if(req.body.name != undefined && req.body.password != undefined){
+		let sql = `select * from user where uname = '${req.body.name}'`;
+		let sql2 = `insert into user (uname,upassword) value ('${req.body.name}','${req.body.password}')`;
+		db.Query(sql).then((data) => {
+			// res.send(data[0]);
+			if (data[0] != undefined) {
 				res.send({
-					// data:data,
-					status: 200,
-					message: "注册成功",
+					status: 401,
+					message: "注册失败,姓名已被注册",
 				});
-			});
-		}
-	});
+			} else {
+				db.Query(sql2).then((data) => {
+					res.send({
+						// data:data,
+						status: 200,
+						message: "注册成功",
+					});
+				});
+			}
+		});
+	} else {
+		res.send({
+			status:404,
+			message:'账号或密码不能为空'
+		})
+	}
 };
 
 // 登录的处理函数
