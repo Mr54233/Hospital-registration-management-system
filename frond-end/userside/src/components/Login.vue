@@ -26,6 +26,7 @@
 					></el-input>
 				</el-form-item>
 
+					<el-button class="lbtns" type="success">注册</el-button>
 				<el-form-item class="btns">
 					<el-button type="primary" @click="login">登录</el-button>
 					<el-button type="info" @click="resetLoginForm"
@@ -98,7 +99,7 @@ export default {
 			this.$message.success("登陆成功");
 			// 将返回数据中的令牌保存到sessionStorage
 			window.sessionStorage.setItem("token", res.token);
-			// 进入后台管理子系统的首页中去
+			// 进入首页
 			this.$router.push("/home");
 		},
 	},
@@ -146,6 +147,9 @@ export default {
 
 .btns {
 	float: right;
+}
+.lbtns{
+	float: left;
 }
 
 .reg_box{
