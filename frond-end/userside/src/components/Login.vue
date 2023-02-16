@@ -1,26 +1,31 @@
 <template>
 	<div id="app" class="login_container">
+			<h1 class="title">医院挂号系统</h1>
 		<div class="login_box">
-			<!-- 脚部的表单区域 -->
+			<!-- 表单区域 -->
+			<h1 class="title">用户登录</h1>
 			<el-form
 				ref="loginFormRef"
-				label-width="80px"
-				:module="loginForm"
+				:model="loginForm"
 				:rules="loginFormRules"
 			>
 				<el-form-item prop="username">
 					<el-input
 						v-model="loginForm.username"
 						prefix-icon="iconfont icon-user"
+						placeholder="请输入用户名"
 					></el-input>
 				</el-form-item>
+
 				<el-form-item prop="password">
 					<el-input
 						v-model="loginForm.password"
 						prefix-icon="iconfont icon-3702mima"
 						type="password"
+						placeholder="请输入密码"
 					></el-input>
 				</el-form-item>
+
 				<el-form-item class="btns">
 					<el-button type="primary" @click="login">登录</el-button>
 					<el-button type="info" @click="resetLoginForm"
@@ -29,16 +34,21 @@
 				</el-form-item>
 			</el-form>
 		</div>
+		<div class="reg_box">
+			<h1 class="title">用户注册</h1>
+		</div>
 	</div>
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
 	data() {
 		return {
 			loginForm: {
-				name: "",
-				password: "",
+				username: '',
+				password: ''
 			},
 			loginFormRules: {
 				username: [
@@ -48,9 +58,9 @@ export default {
 						trigger: "blur",
 					},
 					{
-						min: 3,
+						min: 2,
 						max: 10,
-						message: "长度是3到10个字符",
+						message: "长度是2到10个字符",
 						trigger: "blur",
 					},
 				],
@@ -77,22 +87,20 @@ export default {
 		},
 		async login() {
 			// axios 向api服务器端发送请求
-			const { data} = await this.$http.post(
+			const { data: res } = await this.$http.post(
 				"/user/login",
-				this.loginForm
+				qs.stringify(this.loginForm)
 			);
-            console.log(data);
-			// // 在页面上显示登陆成功的信息
-			// if (res.meta.status !== 200) return this.$message.error(res.meta.message);
-			// this.$message.success("登陆成功");
-			// // 将返回数据中的令牌保存到sessionStorage
-			// window.sessionStorage.setItem("token", res.data.token);
-			// // 进入后台管理子系统的首页中去
-			// this.$router.push("/home");
+
+			// 在页面上显示登陆成功的信息
+			if (res.status !== 200)
+				return this.$message.error(res.message);
+			this.$message.success("登陆成功");
+			// 将返回数据中的令牌保存到sessionStorage
+			window.sessionStorage.setItem("token", res.token);
+			// 进入后台管理子系统的首页中去
+			this.$router.push("/home");
 		},
-        // login(){
-        //     console.log(this.loginForm);
-        // }
 	},
 };
 </script>
@@ -100,7 +108,14 @@ export default {
 <style scoped>
 .login_container {
 	height: 100%;
-	background-color: #124170;
+	background-color: #2592a8;
+}
+
+.title{
+	position: absolute;
+	left: 50%;
+	top: 10%;
+	transform: translate(-50%, -50%);
 }
 
 .login_box {
@@ -116,24 +131,6 @@ export default {
 	margin: 0 auto;
 }
 
-.img_box {
-	position: absolute;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 130px;
-	height: 130px;
-	padding: 10px;
-	border: 1px solid #eee;
-	border-radius: 50%;
-	background-color: #fff;
-}
-
-.img_box img {
-	width: 130px;
-	height: 130px;
-	border-radius: 50%;
-	background-color: #ccc;
-}
 .el-form {
 	position: absolute;
 	bottom: 0;
@@ -142,11 +139,16 @@ export default {
 	box-sizing: border-box;
 	/* margin: 0 auto; */
 }
+
 .el-input {
 	width: 100%;
 }
 
 .btns {
 	float: right;
+}
+
+.reg_box{
+	display: none;
 }
 </style>

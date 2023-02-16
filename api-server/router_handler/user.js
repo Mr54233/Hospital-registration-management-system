@@ -19,9 +19,9 @@ exports.getUser = (req, res) => {
 
 // 注册用户的处理函数
 exports.regUser = (req, res) => {
-	if(req.body.name != undefined && req.body.password != undefined){
-		let sql = `select * from user where uname = '${req.body.name}'`;
-		let sql2 = `insert into user (uname,upassword) value ('${req.body.name}','${req.body.password}')`;
+	if(req.body.username != undefined && req.body.password != undefined){
+		let sql = `select * from user where uname = '${req.body.username}'`;
+		let sql2 = `insert into user (uname,upassword) value ('${req.body.username}','${req.body.password}')`;
 		db.Query(sql).then((data) => {
 			// res.send(data[0]);
 			if (data[0] != undefined) {
@@ -49,36 +49,36 @@ exports.regUser = (req, res) => {
 
 // 登录的处理函数
 exports.login = (req, res) => {
-	if (req.body.name == "" || req.body.password == "") {
+	if (req.body.username == undefined || req.body.password == undefined) {
 		res.send({
 			status: 400,
 			message: "账号或者密码不能为空",
+			data:req.body
 		});
 	} else {
-		let sql = `select * from user where uname = ${req.body.name} and upassword = ${req.body.password}`;
+		let sql = `select * from user where uname = ${req.body.username} and upassword = ${req.body.password}`;
 		db.Query(sql).then((data) => {
 			// res.send(data)
-			if (data[0].uname == req.body.name) {
+			if (data[0]!= undefined && data[0].uname == req.body.username) {
 				res.send({
 					// data: data[0],
 					status: 200,
 					message: "登陆成功",
-					token: JWT.sign({ name: req.body.name }, secretKey, {
+					token: JWT.sign({ username: req.body.username }, secretKey, {
 						expiresIn: "1y",
 					}),
 				});
 			} else {
 				res.send({
-					// data:data,
+					data:data,
 					status: 401.1,
 					message: "账号或者密码错误,请重新输入",
 				});
 			}
 		});
 	}
-	// res.send("login OK");
-	// res.send(req.body,res.body);
-	// db.Query
+
+	// console.log(req.body);
 };
 
 // 添加/修改 信息的处理函数
@@ -88,9 +88,9 @@ exports.addMsg = (req, res) => {
 	// res.send(token);
 	JWT.verify(token, secretKey, (err, decoded) => {
 		// res.send(decoded.name)
-		if (decoded.name) {
+		if (decoded.username) {
 			// let sql = `insert into user (usex,uage,uphone) value (${req.body.sex},${req.body.age},${req.body.phone}) select (usex,uage,uphone) from user where uname = ${decoded.name}`;
-			let sql = `update user set usex=${req.body.sex},uage=${req.body.age},uphone=${req.body.phone} where uname = ${decoded.name}`;
+			let sql = `update user set usex=${req.body.sex},uage=${req.body.age},uphone=${req.body.phone} where uname = ${decoded.username}`;
 			db.Query(sql).then((data) => {
 				// console.log(data);
 				res.send(data);

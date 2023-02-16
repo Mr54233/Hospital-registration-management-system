@@ -4,14 +4,22 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 
+
 Vue.config.productionTip = false
+
+// 导入通用样式文件
+import "./assets/css/global.css";
 
 // 导入elementUI 样式和插件
 import "element-ui/lib/theme-chalk/index.css";
 import "./plugins/element";
 
+// 导入第三方字体图标类样式
+import "./assets/fonts/iconfont.css";
+
 // 设置axios默认url
-axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.baseURL = "http://127.0.0.1:3000";
+axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 
 // axios.defaults.withCredentials = true
 // axios.defaults.baseURL = "base_url";
