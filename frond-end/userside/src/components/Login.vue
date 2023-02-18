@@ -23,6 +23,7 @@
 						prefix-icon="iconfont icon-3702mima"
 						type="password"
 						placeholder="请输入密码"
+						@keyup.native.enter="login"
 					></el-input>
 				</el-form-item>
 
@@ -65,6 +66,7 @@
 						prefix-icon="iconfont icon-3702mima"
 						type="password"
 						placeholder="请再次输入密码"
+						@keyup.native.enter="reg"
 					></el-input>
 				</el-form-item>
 

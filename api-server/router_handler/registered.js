@@ -12,7 +12,11 @@ const secretKey = "hrms";
 exports.getDepart = (req, res) => {
 	let sql = `select * from department`;
 	db.Query(sql).then((data) => {
-		res.send(data);
+		res.send({
+			status: 200,
+			message: "获取成功",
+			data: data,
+		});
 	});
 };
 
@@ -42,20 +46,20 @@ exports.getReg = (req, res) => {
 	// res.send(token)
 	JWT.verify(token, secretKey, (err, decoded) => {
 		// res.send(decoded)
-		let sql = `select * from registered where rusername = ${decoded.name}`
-		db.Query(sql).then(data=>{
-			res.send(data)
-		})
+		let sql = `select * from registered where rusername = ${decoded.name}`;
+		db.Query(sql).then((data) => {
+			res.send(data);
+		});
 	});
 };
 
 // 删除挂号信息
-exports.delReg = (req,res)=>{
+exports.delReg = (req, res) => {
 	let token = req.headers.authorization.split(" ")[1];
-	JWT.verify(token,secretKey,(err,decoded)=>{
-		let sql = `update registered set del = 0 where rusername = ${decoded.name}`
-		db.Query(sql).then(data=>{
-			res.send(data)
-		})
-	})
-}
+	JWT.verify(token, secretKey, (err, decoded) => {
+		let sql = `update registered set del = 0 where rusername = ${decoded.name}`;
+		db.Query(sql).then((data) => {
+			res.send(data);
+		});
+	});
+};

@@ -64,7 +64,7 @@ exports.login = (req, res) => {
 					// data: data[0],
 					status: 200,
 					message: "登陆成功",
-					token: JWT.sign({ username: req.body.username }, secretKey, {
+					token: "Bearer "+JWT.sign({ username: req.body.username }, secretKey, {
 						expiresIn: "1y",
 					}),
 				});
