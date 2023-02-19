@@ -8,6 +8,10 @@ const handler = require("../router_handler/registered");
 // 查询科室
 router.get("/getDepart", handler.getDepart);
 
+
+// 查询科室下的医生
+router.get("/getDoc", handler.getDoc);
+
 // 挂号模块
 router.post("/regMsg", handler.regMsg);
 

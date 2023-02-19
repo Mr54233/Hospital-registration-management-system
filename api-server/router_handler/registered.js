@@ -20,6 +20,20 @@ exports.getDepart = (req, res) => {
 	});
 };
 
+// 获取科室下的医生信息
+exports.getDoc = (req, res) => {
+	// res.send(req.query);
+	let sql = `select * from doctor where department = "${req.query.pname}"`
+	db.Query(sql).then(data=>{
+		// res.send(data)
+		res.send({
+			status:200,
+			message:"获取成功",
+			data:data
+		})
+	})
+};
+
 // 挂号
 exports.regMsg = (req, res) => {
 	let token = req.headers.authorization.split(" ")[1];

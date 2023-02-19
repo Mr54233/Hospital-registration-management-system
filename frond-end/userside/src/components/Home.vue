@@ -10,7 +10,7 @@
 			<!-- 侧边栏宽度 -->
 			<el-aside width="200px">
 				<el-menu
-					:default-active="activeIndex"
+					:default-active="activeIndex.toString()"
 					class="el-menu-vertical"
 					background-color="#333744"
 					text-color="#fff"
@@ -20,18 +20,17 @@
 						:index="room.id + ''"
 						v-for="room in roomList"
 						:key="room.id"
-						@click="setActiveIndex(room.id)"
+						@click="
+							setActiveIndex(room.id);
+							getDocName(room.pname);
+						"
 					>
 						<span>{{ room.pname }}</span>
-						<!-- <template slot="title"> -->
-						<!-- <i :class="icons[room.id]"></i> -->
-						<!-- </template> -->
 					</el-menu-item>
 				</el-menu>
 			</el-aside>
 			<el-main>
-				<!-- <router-view></router-view> -->
-				<span>{{ activeIndex }}</span>
+				<span>{{ docList }}</span>
 			</el-main>
 		</el-container>
 	</el-container>
@@ -50,6 +49,8 @@ export default {
 			roomList: [],
 			// 激活菜单的index
 			activeIndex: "",
+			roomName: "",
+			docList: [],
 		};
 	},
 	methods: {
@@ -74,6 +75,16 @@ export default {
 			this.activeIndex = activeIndex;
 			// 将激活菜单的index保存到localStorage中
 			window.localStorage.setItem("activeIndex", activeIndex);
+		},
+		async getDocName(rname) {
+			this.roomName = rname;
+			const { data: res } = await this.$http.get("/reg/getDoc",{params:{pname : this.roomName}});
+			// console.log(res);
+			if(res.status !== 200){
+				return this.$message.error(res.message)
+			} else {
+				this.docList = res.data
+			}
 		},
 	},
 };
