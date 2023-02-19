@@ -199,6 +199,7 @@ export default {
 				this.$message.success("登陆成功");
 				// 将返回数据中的令牌保存到sessionStorage
 				window.localStorage.setItem("token", res.token);
+				window.localStorage.setItem("username", res.userInfo);
 				// 进入首页
 				this.$router.push("/home");
 			} else {

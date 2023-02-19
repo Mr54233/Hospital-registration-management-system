@@ -67,6 +67,7 @@ exports.login = (req, res) => {
 					token: "Bearer "+JWT.sign({ username: req.body.username }, secretKey, {
 						expiresIn: "1y",
 					}),
+					userInfo:req.body.username
 				});
 			} else {
 				res.send({
