@@ -4,11 +4,16 @@
 			<span class="title">医院挂号系统</span>
 			<el-dropdown>
 				<span class="el-dropdown-link">
-					{{userName}}<i class="el-icon-arrow-down el-icon--right"></i>
+					{{ userName
+					}}<i class="el-icon-arrow-down el-icon--right"></i>
 				</span>
 				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item>个人中心</el-dropdown-item>
-					<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
+					<el-dropdown-item @click.native="goCenter"
+						>个人中心</el-dropdown-item
+					>
+					<el-dropdown-item @click.native="logout"
+						>退出登录</el-dropdown-item
+					>
 				</el-dropdown-menu>
 			</el-dropdown>
 		</el-header>
@@ -64,16 +69,36 @@
 					>
 					</el-table-column>
 					<el-table-column label="操作" align="center">
-						<el-button type="success" @click="order"
-							>挂号</el-button
-						>
-						<el-button type="primary" @click="preOrder"
-							>预约</el-button
-						>
+						<template v-slot="scope">
+							<el-button
+								type="success"
+								@click="order(scope.row.id)"
+								>挂号</el-button
+							>
+							<el-button
+								type="primary"
+								@click="preOrder(scope.row.id)"
+								>预约</el-button
+							>
+						</template>
 					</el-table-column>
 				</el-table>
 			</el-main>
 		</el-container>
+		<el-dialog
+			title="挂号面板"
+			:visible.sync="showDialog"
+			width="30%"
+			:before-close="handleClose"
+		>
+			<span>这是一段信息</span>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="showDialog = false">取 消</el-button>
+				<el-button type="primary" @click="showDialog = false"
+					>确 定</el-button
+				>
+			</span>
+		</el-dialog>
 	</el-container>
 </template>
 
@@ -91,6 +116,7 @@ export default {
 
 		// 获取用户名
 		this.getUserName();
+		// this.userName = this.$store.state.username
 	},
 	data() {
 		return {
@@ -100,12 +126,19 @@ export default {
 			activeIndex: "",
 			roomName: "",
 			docList: [],
+			showDialog: false,
 		};
 	},
 	methods: {
 		// 获取用户姓名
 		getUserName() {
 			this.userName = window.localStorage.getItem("username");
+			// this.username = this.$store.state.username
+			// this.$store.dispatch("changeUserName",userName)
+		},
+		// 跳转个人中心
+		goCenter() {
+			this.$router.push("/userCenter");
 		},
 		// 退出登陆的处理方法
 		logout() {
@@ -163,11 +196,19 @@ export default {
 				return "女";
 			}
 		},
-		order() {
-			console.log(1);
+		order(id) {
+			// console.log(id);
+			this.showDialog = !this.showDialog;
 		},
-		preOrder() {
-			console.log(2);
+		preOrder(id) {
+			console.log(id);
+		},
+		handleClose(done) {
+			this.$confirm("确认关闭？")
+				.then((_) => {
+					done();
+				})
+				.catch((_) => {});
 		},
 	},
 };
