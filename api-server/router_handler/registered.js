@@ -26,11 +26,11 @@ exports.getDoc = (req, res) => {
 	let sql = `select * from doctor where department = "${req.query.pname}"`
 	db.Query(sql).then(data=>{
 		// res.send(data)
-		res.send({
-			status:200,
-			message:"获取成功",
-			data:data
-		})
+			res.send({
+				status:200,
+				message:"获取成功",
+				data:data
+			})
 	})
 };
 
@@ -40,15 +40,21 @@ exports.regMsg = (req, res) => {
 	// res.send(token)
 	JWT.verify(token, secretKey, (err, decoded) => {
 		// res.send(decoded)
-		let sql = `select * from user where uname = ${decoded.name}`;
+		let sql = `select * from user where uname = ${decoded.username}`;
 		db.Query(sql).then((data) => {
 			// res.send(req.body)
 			let user = data[0];
 			// data = data[0]
-			let sql1 = `insert into registered (ruserid,rusername,ruserphone,rdoctorid,rdoctorname,rtime,disease) value (${user.uid},'${user.uname}','${user.uphone}',${req.body.doctorid},'${req.body.doctorname}',STR_TO_DATE("${req.body.time}", "%Y-%m-%d"),'${req.body.disease}')`;
+			let sql1 = `insert into registered (ruserid,rusername,ruserphone,rdoctorid,rdoctorname,rtime,disease) value (${user.uid},'${user.uname}','${user.uphone}',${req.body.id},'${req.body.dname}',STR_TO_DATE("${req.body.orderTime}", "%Y-%m-%d"),'${req.body.disease}')`;
 			// res.send(sql1)
 			db.Query(sql1).then((data) => {
-				res.send(data);
+				// res.send(data);
+				if(data.affectedRows == 1){
+					res.send({
+						status:200,
+						message:"挂号成功"
+					})
+				}
 			});
 		});
 	});
@@ -60,7 +66,7 @@ exports.getReg = (req, res) => {
 	// res.send(token)
 	JWT.verify(token, secretKey, (err, decoded) => {
 		// res.send(decoded)
-		let sql = `select * from registered where rusername = ${decoded.name}`;
+		let sql = `select * from registered where rusername = ${decoded.username}`;
 		db.Query(sql).then((data) => {
 			res.send(data);
 		});
@@ -71,7 +77,7 @@ exports.getReg = (req, res) => {
 exports.delReg = (req, res) => {
 	let token = req.headers.authorization.split(" ")[1];
 	JWT.verify(token, secretKey, (err, decoded) => {
-		let sql = `update registered set del = 0 where rusername = ${decoded.name}`;
+		let sql = `update registered set del = 0 where rusername = ${decoded.username}`;
 		db.Query(sql).then((data) => {
 			res.send(data);
 		});

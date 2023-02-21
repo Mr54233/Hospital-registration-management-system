@@ -23,6 +23,7 @@ import {
 	Tooltip,
 	Pagination,
 	Dialog,
+	DatePicker,
 	MessageBox,
 	Tag,
 	Tree,
@@ -85,6 +86,7 @@ Vue.use(TimelineItem);
 Vue.use(Dropdown);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
+Vue.use(DatePicker);
 
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;

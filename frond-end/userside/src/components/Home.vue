@@ -4,16 +4,11 @@
 			<span class="title">医院挂号系统</span>
 			<el-dropdown>
 				<span class="el-dropdown-link">
-					{{ userName
-					}}<i class="el-icon-arrow-down el-icon--right"></i>
+					{{ userName }}<i class="el-icon-arrow-down el-icon--right"></i>
 				</span>
 				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item @click.native="goCenter"
-						>个人中心</el-dropdown-item
-					>
-					<el-dropdown-item @click.native="logout"
-						>退出登录</el-dropdown-item
-					>
+					<el-dropdown-item @click.native="goCenter">个人中心</el-dropdown-item>
+					<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
 				</el-dropdown-menu>
 			</el-dropdown>
 		</el-header>
@@ -41,13 +36,9 @@
 				</el-menu>
 			</el-aside>
 			<el-main>
-				<!-- <span>{{ docList }}</span> -->
+				<!-- 医生列表 -->
 				<el-table :data="docList" border style="width: 100%">
-					<el-table-column
-						prop="dname"
-						label="医生姓名"
-						align="center"
-					>
+					<el-table-column prop="dname" label="医生姓名" align="center">
 					</el-table-column>
 					<el-table-column
 						prop="dsex"
@@ -56,67 +47,73 @@
 						align="center"
 					>
 					</el-table-column>
-					<el-table-column
-						prop="dage"
-						label="医生年龄"
-						align="center"
-					>
+					<el-table-column prop="dage" label="医生年龄" align="center">
 					</el-table-column>
-					<el-table-column
-						prop="department"
-						label="所属科室"
-						align="center"
-					>
+					<el-table-column prop="department" label="所属科室" align="center">
 					</el-table-column>
 					<el-table-column label="操作" align="center">
 						<template v-slot="scope">
-							<el-button
-								type="success"
-								@click="order(scope.row)"
+							<el-button type="success" @click="order(scope.row)"
 								>挂号</el-button
-							>
-							<el-button
-								type="primary"
-								@click="preOrder(scope.row.id)"
-								>预约</el-button
 							>
 						</template>
 					</el-table-column>
 				</el-table>
 			</el-main>
 		</el-container>
+		<!-- 挂号面板 -->
 		<el-dialog
 			title="挂号面板"
 			:visible.sync="showDialog"
 			width="30%"
 			:before-close="handleClose"
 		>
-			<!-- <span>这是一段信息</span>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="showDialog = false">取 消</el-button>
-				<el-button type="primary" @click="showDialog = false"
-					>确 定</el-button
-				>
-			</span> -->
-			<el-form :model="theDoc">
+			<el-form :model="diaForm" :rules="diaFormRules" ref="diaFormRef">
 				<el-form-item label="医生名称" :label-width="formLabelWidth">
-					<el-input v-model="theDoc.dname" :disabled="true"></el-input>
+					<el-input v-model="diaForm.dname" :disabled="true"></el-input>
 				</el-form-item>
 				<el-form-item label="医生年龄" :label-width="formLabelWidth">
-					<el-input v-model="theDoc.dage" :disabled="true"></el-input>
+					<el-input v-model="diaForm.dage" :disabled="true"></el-input>
 				</el-form-item>
 				<el-form-item label="所属科室" :label-width="formLabelWidth">
-					<el-input v-model="theDoc.department" :disabled="true"></el-input>
+					<el-input v-model="diaForm.department" :disabled="true"></el-input>
 				</el-form-item>
-				<el-form-item label="挂号时间" :label-width="formLabelWidth">
-					<el-input ></el-input>
+				<el-form-item label="患者姓名" :label-width="formLabelWidth">
+					<el-input v-model="userName" :disabled="true"></el-input>
+				</el-form-item>
+				<el-form-item
+					label="所患疾病"
+					:label-width="formLabelWidth"
+					prop="disease"
+				>
+					<el-input v-model="diaForm.disease"></el-input>
+				</el-form-item>
+				<!-- 今天开始的输入框 -->
+				<el-form-item
+					label="挂号时间"
+					:label-width="formLabelWidth"
+					prop="orderTime"
+				>
+					<el-date-picker
+						v-model="diaForm.orderTime"
+						type="date"
+						placeholder="选择日期"
+						value-format="yyyy-MM-dd"
+						:picker-options="pickerOptions"
+					></el-date-picker>
 				</el-form-item>
 			</el-form>
+
+			<span slot="footer" class="dialog-footer">
+				<el-button type="primary" @click="submitReg">确 定 挂 号</el-button>
+			</span>
 		</el-dialog>
 	</el-container>
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
 	// 在创建了vue对象之后 , 请求api服务器端提供的导航菜单数据
 	created() {
@@ -134,7 +131,6 @@ export default {
 	},
 	data() {
 		return {
-			formLabelWidth:"120px",
 			userName: "",
 			roomList: [],
 			// 激活菜单的index
@@ -142,7 +138,23 @@ export default {
 			roomName: "",
 			docList: [],
 			showDialog: false,
-			theDoc:"",
+			formLabelWidth: "120px",
+			diaForm: "",
+			diaVal: "",
+			pickerOptions: {
+				disabledDate(time) {
+					return time.getTime() < Date.now() - 86400000; // 选当前时间之前的时间
+				},
+			},
+			// 对话框规则
+			diaFormRules: {
+				disease: [
+					{ required: true, message: "请输入患者所患疾病", trigger: "blur" },
+				],
+				orderTime: [
+					{ required: true, message: "请选择挂号时间", trigger: "change" },
+				],
+			},
 		};
 	},
 	methods: {
@@ -214,11 +226,26 @@ export default {
 		},
 		order(doc) {
 			// console.log(doc);
-			this.theDoc = doc
-			this.showDialog = !this.showDialog;
+			this.diaForm = doc;
+			this.showDialog = true;
 		},
-		preOrder(id) {
-			console.log(id);
+		async submitReg() {
+			this.$refs.diaFormRef.validate((valid) => {
+				this.diaVa = valid;
+			});
+			if (this.diaVa) {
+				const { data: res } = await this.$http.post(
+					"/reg/regMsg",
+					qs.stringify(this.diaForm)
+				);
+				// 在页面上显示挂号成功的信息
+				if (res.status !== 200) return this.$message.error(res.message);
+				this.$message.success("挂号成功");
+				// 关闭对话框
+				this.showDialog = false;
+			} else {
+				this.$message.error("请按照规范填写所患疾病和预约日期");
+			}
 		},
 		handleClose(done) {
 			this.$confirm("确认关闭？")
