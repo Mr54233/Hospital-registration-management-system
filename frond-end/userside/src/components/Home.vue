@@ -72,7 +72,7 @@
 						<template v-slot="scope">
 							<el-button
 								type="success"
-								@click="order(scope.row.id)"
+								@click="order(scope.row)"
 								>挂号</el-button
 							>
 							<el-button
@@ -91,13 +91,27 @@
 			width="30%"
 			:before-close="handleClose"
 		>
-			<span>这是一段信息</span>
+			<!-- <span>这是一段信息</span>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="showDialog = false">取 消</el-button>
 				<el-button type="primary" @click="showDialog = false"
 					>确 定</el-button
 				>
-			</span>
+			</span> -->
+			<el-form :model="theDoc">
+				<el-form-item label="医生名称" :label-width="formLabelWidth">
+					<el-input v-model="theDoc.dname" :disabled="true"></el-input>
+				</el-form-item>
+				<el-form-item label="医生年龄" :label-width="formLabelWidth">
+					<el-input v-model="theDoc.dage" :disabled="true"></el-input>
+				</el-form-item>
+				<el-form-item label="所属科室" :label-width="formLabelWidth">
+					<el-input v-model="theDoc.department" :disabled="true"></el-input>
+				</el-form-item>
+				<el-form-item label="挂号时间" :label-width="formLabelWidth">
+					<el-input ></el-input>
+				</el-form-item>
+			</el-form>
 		</el-dialog>
 	</el-container>
 </template>
@@ -120,6 +134,7 @@ export default {
 	},
 	data() {
 		return {
+			formLabelWidth:"120px",
 			userName: "",
 			roomList: [],
 			// 激活菜单的index
@@ -127,6 +142,7 @@ export default {
 			roomName: "",
 			docList: [],
 			showDialog: false,
+			theDoc:"",
 		};
 	},
 	methods: {
@@ -196,8 +212,9 @@ export default {
 				return "女";
 			}
 		},
-		order(id) {
-			// console.log(id);
+		order(doc) {
+			// console.log(doc);
+			this.theDoc = doc
 			this.showDialog = !this.showDialog;
 		},
 		preOrder(id) {
