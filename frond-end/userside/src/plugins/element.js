@@ -44,8 +44,14 @@ import {
 	Dropdown,
 	DropdownMenu,
 	DropdownItem,
+	Radio,
+	RadioGroup,
+	RadioButton
 } from "element-ui";
 
+Vue.use(Radio);
+Vue.use(RadioGroup);
+Vue.use(RadioButton);
 Vue.use(Button);
 Vue.use(Form);
 Vue.use(FormItem);

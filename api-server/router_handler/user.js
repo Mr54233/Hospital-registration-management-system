@@ -10,16 +10,22 @@ const secretKey = "hrms";
 // 获取当前用户
 exports.getUser = (req, res) => {
 	// res.send(req.query)
-	let sql = `select * from user where uname = '${req.query.name}'`;
+	let sql = `select * from user where uname = '${req.query.username}'`;
 	db.Query(sql).then((data) => {
-		res.send(data[0]);
+		// res.send(data);
 		// return data[0];
+		// console.log(data);
+		res.send({
+			status: 200,
+			message: "获取成功",
+			data: data,
+		});
 	});
 };
 
 // 注册用户的处理函数
 exports.regUser = (req, res) => {
-	if(req.body.username != undefined && req.body.password != undefined){
+	if (req.body.username != undefined && req.body.password != undefined) {
 		let sql = `select * from user where uname = '${req.body.username}'`;
 		let sql2 = `insert into user (uname,upassword) value ('${req.body.username}','${req.body.password}')`;
 		db.Query(sql).then((data) => {
@@ -41,9 +47,9 @@ exports.regUser = (req, res) => {
 		});
 	} else {
 		res.send({
-			status:404,
-			message:'账号或密码不能为空'
-		})
+			status: 404,
+			message: "账号或密码不能为空",
+		});
 	}
 };
 
@@ -53,25 +59,27 @@ exports.login = (req, res) => {
 		res.send({
 			status: 400,
 			message: "账号或者密码不能为空",
-			data:req.body
+			data: req.body,
 		});
 	} else {
 		let sql = `select * from user where uname = ${req.body.username} and upassword = ${req.body.password}`;
 		db.Query(sql).then((data) => {
 			// res.send(data)
-			if (data[0]!= undefined && data[0].uname == req.body.username) {
+			if (data[0] != undefined && data[0].uname == req.body.username) {
 				res.send({
 					// data: data[0],
 					status: 200,
 					message: "登陆成功",
-					token: "Bearer "+JWT.sign({ username: req.body.username }, secretKey, {
-						expiresIn: "1y",
-					}),
-					userInfo:req.body.username
+					token:
+						"Bearer " +
+						JWT.sign({ username: req.body.username }, secretKey, {
+							expiresIn: "1y",
+						}),
+					userInfo: req.body.username,
 				});
 			} else {
 				res.send({
-					data:data,
+					data: data,
 					status: 401.1,
 					message: "账号或者密码错误,请重新输入",
 				});
@@ -98,9 +106,9 @@ exports.addMsg = (req, res) => {
 			});
 		} else {
 			res.send({
-				status:400,
-				message:'用户不存在'
-			})
+				status: 400,
+				message: "用户不存在",
+			});
 		}
 	});
 };
