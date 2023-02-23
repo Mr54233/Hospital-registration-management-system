@@ -21,5 +21,8 @@ router.get("/getReg", handler.getReg);
 // 删除挂号信息
 router.post("/delReg",handler.delReg)
 
+// 更改挂号时间
+router.post("/updateReg",handler.updateReg)
+
 // 将路由对象共享出去
 module.exports = router;

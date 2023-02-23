@@ -96,13 +96,24 @@ exports.addMsg = (req, res) => {
 	let token = req.headers.authorization.split(" ")[1];
 	// res.send(token);
 	JWT.verify(token, secretKey, (err, decoded) => {
-		// res.send(decoded.name)
+		// res.send(decoded.username)
 		if (decoded.username) {
 			// let sql = `insert into user (usex,uage,uphone) value (${req.body.sex},${req.body.age},${req.body.phone}) select (usex,uage,uphone) from user where uname = ${decoded.name}`;
-			let sql = `update user set usex=${req.body.sex},uage=${req.body.age},uphone=${req.body.phone} where uname = ${decoded.username}`;
+			let sql = `update user set usex="${req.body.usex}",uage="${req.body.uage}",uphone="${req.body.uphone}" where uname = "${decoded.username}"`;
 			db.Query(sql).then((data) => {
 				// console.log(data);
-				res.send(data);
+				// res.send(data);
+				if (data.affectedRows == 1) {
+					res.send({
+						status: 200,
+						message: "修改成功",
+					});
+				} else {
+					res.send({
+						status: 400,
+						message: "修改失败",
+					});
+				}
 			});
 		} else {
 			res.send({
@@ -112,3 +123,24 @@ exports.addMsg = (req, res) => {
 		}
 	});
 };
+
+// 修改用户密码
+exports.updatePwd = (req, res) => {
+	// console.log(req.body);
+	if(req.body.password == req.body.repassword){
+		let sql = `update user set upassword = ${req.body.password} where uid = ${req.body.uid}`;
+		db.Query(sql).then((data)=>{
+			if(data.affectedRows == 1){
+				res.send({
+					status: 200,
+					message: "修改成功",
+				});
+			}else{
+				res.send({
+					status: 400,
+					message: "修改失败",
+				});
+			}
+		})
+	}
+}

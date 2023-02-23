@@ -15,7 +15,10 @@ router.post("/regUser", handler.regUser);
 router.post("/login", handler.login);
 
 // 添加信息
-router.put("/addMsg", handler.addMsg)
+router.post("/addMsg", handler.addMsg)
+
+// 修改密码
+router.post("/updatePwd", handler.updatePwd)
 
 // 将路由对象共享出去
 module.exports = router;

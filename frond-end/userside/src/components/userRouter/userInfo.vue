@@ -6,7 +6,7 @@
 			<el-breadcrumb-item>个人中心</el-breadcrumb-item>
 		</el-breadcrumb>
 		<!-- 展示用户的个人信息区域 -->
-		<el-form :model="user">
+		<el-form :model="user" label-position="left" label-width="80px">
 			<el-form-item label="用户名">
 				<el-input v-model="user.uname"></el-input>
 			</el-form-item>
@@ -23,14 +23,15 @@
 			<el-form-item label="联系方式">
 				<el-input v-model="user.uphone"></el-input>
 			</el-form-item>
-            <!-- 提交按钮 -->
-            <el-form-item>
-                <el-button type="primary" @click="submitInfo">提交</el-button>
-            </el-form-item>
+			<!-- 提交按钮 -->
+			<el-form-item>
+				<el-button type="primary" @click="submitInfo">提交</el-button>
+			</el-form-item>
 		</el-form>
 	</div>
 </template>
 <script>
+import qs from "qs";
 export default {
 	name: "userInfo",
 	props: { user: {} },
@@ -42,33 +43,31 @@ export default {
 	methods: {
 		// 提交修改的个人信息
 		submitInfo() {
-            console.log(this.user);
-			// // 1. 获取用户修改的个人信息
-			// let user = this.user;
-			// // 2. 发送请求到后端 , 修改用户的个人信息
-			// this.$http
-			// 	.post("/api/user/update", qs.stringify(user))
-			// 	.then((res) => {
-			// 		// 3. 判断是否修改成功
-			// 		if (res.data.code == 200) {
-			// 			// 4. 提示用户修改成功
-			// 			this.$message({
-			// 				message: "修改成功",
-			// 				type: "success",
-			// 			});
-			// 		} else {
-			// 			// 5. 提示用户修改失败
-			// 			this.$message({
-			// 				message: "修改失败",
-			// 				type: "error",
-			// 			});
-			// 		}
-			// 	})
-			// 	.catch((err) => {
-			// 		console.log(err);
-			// 	});
+			console.log(this.user);
+			let user = this.user;
+			this.$http
+				.post("/user/addMsg", qs.stringify(user))
+				.then((res) => {
+					if (res.data.status === 200) {
+						this.$message.success(res.data.message);
+					} else {
+						this.$message.error(res.data.message);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 		},
+		
 	},
 };
 </script>
-<style scoped></style>
+<style scoped>
+.el-breadcrumb {
+	margin: 10px 0 20px;
+}
+.el-input {
+	width: 400px;
+}
+
+</style>
