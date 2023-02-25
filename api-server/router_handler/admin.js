@@ -155,43 +155,82 @@ exports.delUser = (req, res) => {
 	});
 };
 
-// 管理科室信息
-exports.updateDep = (req, res) => {
+
+// 获取医生列表
+exports.getDocList = (req, res) => {
 	let token = req.headers.authorization.split(" ")[1];
 	// res.send(token);
 	JWT.verify(token, secretKey, (err, decoded) => {
 		if (decoded.adminName) {
-			// 如果id不存在，说明是添加科室，否则是修改科室信息
-			if (req.body.id == undefined) {
-				let sql = `select * from department where pname = ${req.body.pname}`;
-				db.Query(sql).then((data) => {
-					if (data[0] != undefined) {
-						res.send({
-							status: 402,
-							message: "科室已存在",
-						});
-					} else {
-						let sql = `insert into department (pname) values (${req.body.pname})`;
-						db.Query(sql).then((data) => {
-							res.send({
-								data: data,
-								status: 200,
-								message: "添加成功",
-							});
-						});
-					}
+			let sql = `select * from doctor`;
+			db.Query(sql).then((data) => {
+				res.send({
+					data: data,
+					status: 200,
+					message: "获取成功",
 				});
-			} else {
-				// id存在，说明是修改科室信息
-				let sql = `update department set pname = ${req.body.pname} where id = ${req.body.id}`;
-				db.Query(sql).then((data) => {
+			});
+		} else {
+			res.send({
+				status: 401,
+				message: "请先登录",
+			});
+		}
+	});
+};
+
+// 新增医生
+exports.addDoc = (req, res) => {
+	let token = req.headers.authorization.split(" ")[1];
+	// res.send(token);
+	JWT.verify(token, secretKey, (err, decoded) => {
+		if (decoded.adminName) {
+			let sql = `select * from doctor where dname = "${req.body.dname}"`;
+			let sql2 = `insert into doctor (dname, dage, dsex, department) values ("${req.body.dname}", "${req.body.dage}", "${req.body.dsex}", "${req.body.department}")`;
+			db.Query(sql).then((data) => {
+				if (data[0] != undefined) {
 					res.send({
-						data: data,
-						status: 200,
-						message: "修改成功",
+						status: 402,
+						message: "医生已存在",
 					});
+				} else {
+					db.Query(sql2).then((data) => {
+						res.send({
+							data: data,
+							status: 200,
+							message: "添加成功",
+						});
+					});
+				}
+			});
+		} else {
+			res.send({
+				status: 401,
+				message: "请先登录",
+			});
+		}
+	});
+};
+
+// 删除医生
+exports.delDoc = (req, res) => {
+	let token = req.headers.authorization.split(" ")[1];
+	// res.send(token);
+	JWT.verify(token, secretKey, (err, decoded) => {
+		if (decoded.adminName) {
+			let sql = `update doctor set del = 0 where id = "${req.body.id}"`;
+			db.Query(sql).then((data) => {
+				res.send({
+					data: data,
+					status: 200,
+					message: "删除成功",
 				});
-			}
+			});
+		} else {
+			res.send({
+				status: 401,
+				message: "请先登录",
+			});
 		}
 	});
 };
@@ -202,7 +241,7 @@ exports.updateDoc = (req, res) => {
 	// res.send(token);
 	JWT.verify(token, secretKey, (err, decoded) => {
 		if (decoded.adminName) {
-			let sql = `update doctor set dname = ${req.body.dname}, dage = ${req.body.dage}, dsex = ${req.body.dsex}, department = ${req.body.department} where id = ${req.body.id}`;
+			let sql = `update doctor set dname = "${req.body.dname}", dage =" ${req.body.dage}", dsex = "${req.body.dsex}", department = "${req.body.department}" where id = "${req.body.id}"`;
 			db.Query(sql).then((data) => {
 				res.send({
 					data: data,
@@ -215,6 +254,50 @@ exports.updateDoc = (req, res) => {
 				status: 401,
 				message: "请先登录",
 			});
+		}
+	});
+};
+
+
+
+
+// 管理科室信息
+exports.updateDep = (req, res) => {
+	let token = req.headers.authorization.split(" ")[1];
+	// res.send(token);
+	JWT.verify(token, secretKey, (err, decoded) => {
+		if (decoded.adminName) {
+			// 如果id不存在，说明是添加科室，否则是修改科室信息
+			if (req.body.id == undefined) {
+				let sql = `select * from department where pname = "${req.body.pname}"`;
+				db.Query(sql).then((data) => {
+					if (data[0] != undefined) {
+						res.send({
+							status: 402,
+							message: "科室已存在",
+						});
+					} else {
+						let sql = `insert into department (pname) values ("${req.body.pname}")`;
+						db.Query(sql).then((data) => {
+							res.send({
+								data: data,
+								status: 200,
+								message: "添加成功",
+							});
+						});
+					}
+				});
+			} else {
+				// id存在，说明是修改科室信息
+				let sql = `update department set pname = "${req.body.pname}" where id = "${req.body.id}"`;
+				db.Query(sql).then((data) => {
+					res.send({
+						data: data,
+						status: 200,
+						message: "修改成功",
+					});
+				});
+			}
 		}
 	});
 };
