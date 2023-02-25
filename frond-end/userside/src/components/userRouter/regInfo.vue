@@ -122,7 +122,7 @@ export default {
 		},
 		tableRowClassName({ row, rowIndex }) {
 			// console.log(row.del);
-			if (row.del === 0) {
+			if (row.del == 0) {
 				// console.log("隐藏");
 				return "hidden";
 			}

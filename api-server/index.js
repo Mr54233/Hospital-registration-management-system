@@ -20,7 +20,7 @@ const secretKey = "hrms";
 // unless() ; 配置那些地址的请求不需要解密来验证身份
 app.use(
 	expressjwt({ secret: secretKey, algorithms: ["HS256"] }).unless({
-		path: ["/user/login", "/user/regUser", "/user/getUser"],
+		path: ["/user/login", "/user/regUser", "/user/getUser","/admin/login"],
 	})
 );
 
@@ -32,11 +32,15 @@ app.use("/user", userRouter);
 const reg = require("./router/registered");
 app.use("/reg", reg);
 
+// 管理员模块
+const admin = require("./router/admin");
+app.use("/admin", admin);
+
 // 错误处理
 app.use((err, req, res, next) => {
 	// token解析失败导致的错误
 	if (err.name == "UnauthorizedError") {
-		return res.send({ status: 401, message: "无效的token" });
+		return res.send({ status: 401, message: "请重新登录" });
 	}
 	// 其他原因导致的错误
 	res.send(err.message);
