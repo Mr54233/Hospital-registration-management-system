@@ -2,16 +2,12 @@
 	<el-container class="home-container">
 		<!-- 头部 -->
 		<el-header>
-			<span class="title">医院挂号系统</span>
-			<el-dropdown>
-				<span class="el-dropdown-link">
-					{{ adminName }}<i class="el-icon-arrow-down el-icon--right"></i>
-				</span>
-				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item @click.native="goCenter">个人中心</el-dropdown-item>
-					<el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
-				</el-dropdown-menu>
-			</el-dropdown>
+			<span class="title">医院挂号管理系统</span>
+
+			<span class="el-dropdown-link">
+				{{ adminName }}
+			</span>
+			<el-button type="info" @click.native="logout">退出登录</el-button>
 		</el-header>
 		<!-- 侧边栏 -->
 		<el-container style="height: 500px">
@@ -50,8 +46,6 @@
 </template>
 
 <script>
-import qs from "qs";
-
 export default {
 	created() {
 		this.getAdminName();
@@ -74,7 +68,7 @@ export default {
 				type: "warning",
 			})
 				.then(() => {
-					localStorage.removeItem("token");
+					localStorage.clear();
 					this.$router.push("/login");
 					this.$message({
 						type: "success",

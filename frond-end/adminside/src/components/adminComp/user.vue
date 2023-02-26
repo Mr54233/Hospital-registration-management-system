@@ -1,7 +1,7 @@
 <template lang="">
 	<div>
 		<!-- 面包屑 -->
-		<el-breadcrumb separator-class="el-icon-arrow-right" style="margin: 10px 0">
+		<el-breadcrumb separator-class="el-icon-arrow-right">
 			<el-breadcrumb-item>首页</el-breadcrumb-item>
 			<el-breadcrumb-item>患者管理</el-breadcrumb-item>
 		</el-breadcrumb>
@@ -105,8 +105,12 @@ export default {
 		// 获取用户列表
 		async getUserList() {
 			const { data: res } = await this.$http.get("/admin/getUserList");
-			if (res.status !== 200) return this.$message.error("获取用户列表失败");
-			this.userList = res.data;
+			if (res.status !== 200) {
+				return this.$message.error(res.message);
+			} else {
+				// this.$message.success(res.message);
+				this.userList = res.data;
+			}
 			// console.log(this.userList);
 		},
 		// 编辑用户

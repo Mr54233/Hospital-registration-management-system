@@ -25,7 +25,7 @@ axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 
 // 使用axios请求拦截器去完成路由守卫任务
 axios.interceptors.request.use((config) => {
-	config.headers.Authorization = window.localStorage.getItem("token");
+	config.headers.Authorization = window.localStorage.getItem("adminToken");
 	return config;
 });
 

@@ -1,5 +1,6 @@
 const db = require("../db/db");
 const JWT = require("jsonwebtoken");
+const e = require("express");
 
 const secretKey = "hrms";
 
@@ -38,12 +39,11 @@ exports.login = (req, res) => {
 	}
 };
 
-// 获取订单信息
-exports.getAppo = (req, res) => {
+//  获取挂号列表
+exports.getRegList = (req, res) => {
 	let token = req.headers.authorization.split(" ")[1];
 	// res.send(token);
 	JWT.verify(token, secretKey, (err, decoded) => {
-		// res.send(decoded.username)
 		if (decoded.adminName) {
 			let sql = `select * from registered`;
 			db.Query(sql).then((data) => {
@@ -63,18 +63,42 @@ exports.getAppo = (req, res) => {
 };
 
 // 管理挂号订单
-exports.updateAppo = (req, res) => {
+exports.updateReg = (req, res) => {
 	let token = req.headers.authorization.split(" ")[1];
 	// res.send(token);
 	JWT.verify(token, secretKey, (err, decoded) => {
 		// res.send(decoded.username)
 		if (decoded.adminName) {
-			let sql = `update registered set ruserphone = ${req.body.ruserphone}, rtime = ${req.body.rtime},disease = ${req.body.disease} where id = ${req.body.id}`;
+			let sql = `update registered set ruserphone = "${req.body.ruserphone}", rtime = "${req.body.rtime}",disease =" ${req.body.disease}",rusername="${req.body.rusername}",rdoctorname="${req.body.rdoctorname}" where id = "${req.body.id}"`;
 			db.Query(sql).then((data) => {
 				res.send({
 					data: data,
 					status: 200,
 					message: "修改成功",
+				});
+			});
+		} else {
+			res.send({
+				status: 401,
+				message: "请先登录",
+			});
+		}
+	});
+};
+
+// 删除挂号
+exports.delReg = (req, res) => {
+	let token = req.headers.authorization.split(" ")[1];
+	// res.send(token);
+	JWT.verify(token, secretKey, (err, decoded) => {
+		// res.send(decoded.username)
+		if (decoded.adminName) {
+			let sql = `update registered set del = 0 where id = "${req.body.id}"`;
+			db.Query(sql).then((data) => {
+				res.send({
+					data: data,
+					status: 200,
+					message: "删除成功",
 				});
 			});
 		} else {
@@ -154,7 +178,6 @@ exports.delUser = (req, res) => {
 		}
 	});
 };
-
 
 // 获取医生列表
 exports.getDocList = (req, res) => {
@@ -258,8 +281,51 @@ exports.updateDoc = (req, res) => {
 	});
 };
 
+// 获取科室列表
+exports.getDepList = (req, res) => {
+	let token = req.headers.authorization.split(" ")[1];
+	// res.send(token);
+	JWT.verify(token, secretKey, (err, decoded) => {
+		if (decoded.adminName) {
+			let sql = `select * from department`;
+			db.Query(sql).then((data) => {
+				res.send({
+					data: data,
+					status: 200,
+					message: "获取成功",
+				});
+			});
+		} else {
+			res.send({
+				status: 401,
+				message: "请先登录",
+			});
+		}
+	});
+};
 
-
+// 删除科室
+exports.delDep = (req, res) => {
+	let token = req.headers.authorization.split(" ")[1];
+	// res.send(token);
+	JWT.verify(token, secretKey, (err, decoded) => {
+		if (decoded.adminName) {
+			let sql = `update department set del = 0 where id = "${req.body.id}"`;
+			db.Query(sql).then((data) => {
+				res.send({
+					data: data,
+					status: 200,
+					message: "删除成功",
+				});
+			});
+		} else {
+			res.send({
+				status: 401,
+				message: "请先登录",
+			});
+		}
+	});
+};
 
 // 管理科室信息
 exports.updateDep = (req, res) => {
@@ -269,16 +335,24 @@ exports.updateDep = (req, res) => {
 		if (decoded.adminName) {
 			// 如果id不存在，说明是添加科室，否则是修改科室信息
 			if (req.body.id == undefined) {
-				let sql = `select * from department where pname = "${req.body.pname}"`;
+				let sql = `select del from department where pname = "${req.body.pname}"`;
 				db.Query(sql).then((data) => {
-					if (data[0] != undefined) {
-						res.send({
-							status: 402,
-							message: "科室已存在",
+					// res.send(data)
+					// console.log(data);
+					// 如果del为0，说明科室已存在 且被删除
+					if (data[0].del == 0) {
+						let sql2 = `update department set del = 1 where pname = "${req.body.pname}"`;
+						db.Query(sql2).then((data) => {
+							res.send({
+								data: data,
+								status: 200,
+								message: "添加成功!",
+							});
 						});
 					} else {
-						let sql = `insert into department (pname) values ("${req.body.pname}")`;
-						db.Query(sql).then((data) => {
+						// del不等于0，说明科室不存在
+						let sql3 = `insert into department (pname) values ("${req.body.pname}")`;
+						db.Query(sql3).then((data) => {
 							res.send({
 								data: data,
 								status: 200,

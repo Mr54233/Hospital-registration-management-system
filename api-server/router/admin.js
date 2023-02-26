@@ -32,12 +32,19 @@ router.post("/updateDoc", handler.updateDoc);
 
 
 // 获取挂号列表
-// router.get("/getAppoList", handler.getAppoList);
+router.get("/getRegList", handler.getRegList);
 
 // 管理挂号订单
-router.post("/updateAppo", handler.updateAppo);
+router.post("/updateReg", handler.updateReg);
 
+// 删除挂号订单
+router.post("/delReg", handler.delReg);
 
+// 获取科室列表
+router.get("/getDepList", handler.getDepList);
+
+// 删除科室
+router.post("/delDep", handler.delDep);
 
 // 管理科室信息
 router.post("/updateDep", handler.updateDep);

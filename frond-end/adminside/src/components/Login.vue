@@ -1,15 +1,15 @@
 <template>
 	<div id="app" class="login_container">
-		<h1 class="title">医院挂号系统</h1>
+		<h1 class="title">医院挂号管理系统</h1>
 		<div class="login_box">
 			<!-- 登录面板 -->
-			<h1 class="title">用户登录</h1>
+			<h1 class="title">管理员登录</h1>
 			<el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules">
 				<el-form-item prop="adminName">
 					<el-input
 						v-model="loginForm.adminName"
 						prefix-icon="iconfont icon-user"
-						placeholder="请输入用户名"
+						placeholder="请输入管理员名"
 					></el-input>
 				</el-form-item>
 
@@ -95,7 +95,7 @@ export default {
 				if (res.status !== 200) return this.$message.error(res.message);
 				this.$message.success("登陆成功");
 				// 将返回数据中的令牌保存到sessionStorage
-				window.localStorage.setItem("token", res.token);
+				window.localStorage.setItem("adminToken", res.token);
 				window.localStorage.setItem("adminName", res.adminInfo);
 				// 进入首页
 				this.$router.push("/home");
@@ -141,7 +141,7 @@ export default {
 <style scoped>
 .login_container {
 	height: 100%;
-	background-color: #2592a8;
+	background-color: #039d50;
 }
 
 .title {

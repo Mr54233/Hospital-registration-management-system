@@ -1,7 +1,7 @@
 <template lang="">
 	<div>
 		<!-- 面包屑 -->
-		<el-breadcrumb separator-class="el-icon-arrow-right" style="margin: 10px 0">
+		<el-breadcrumb separator-class="el-icon-arrow-right">
 			<el-breadcrumb-item>首页</el-breadcrumb-item>
 			<el-breadcrumb-item>医生管理</el-breadcrumb-item>
 		</el-breadcrumb>
@@ -156,8 +156,12 @@ export default {
 		// 获取医生列表
 		async getDocList() {
 			const { data: res } = await this.$http.get("/admin/getDocList");
-			if (res.status !== 200) return this.$message.error("获取医生列表失败");
-			this.docList = res.data;
+			if (res.status !== 200) {
+				return this.$message.error(res.message);
+			} else {
+				// this.$message.success(res.message);
+				this.docList = res.data;
+			}
 			// console.log(this.docList);
 		},
 		// 编辑医生
