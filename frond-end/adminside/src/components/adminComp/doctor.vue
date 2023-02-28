@@ -18,9 +18,9 @@
 				label="性别"
 				:formatter="sexFormate"
 			></el-table-column>
-			<el-table-column prop="dage" label="年龄"></el-table-column>
-			<el-table-column prop="department" label="所属科室"></el-table-column>
-			<el-table-column label="操作">
+			<el-table-column prop="dage" label="年龄" align="center"></el-table-column>
+			<el-table-column prop="department" label="所属科室" align="center"></el-table-column>
+			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
 					<el-button type="primary" @click.native="edit(scope)">编辑</el-button>
 					<el-button type="danger" @click.native="confirmDel(scope)"

@@ -9,11 +9,11 @@
 		<!-- del : 0 disease : "胃痛" id : 1 rdoctorid : 14 rdoctorname : "孙嘉伦" rtime
 		: "2023-06-08" ruserid : 1 rusername : "54" ruserphone : "12312341234" -->
 		<el-table :data="regList" border :row-class-name="tableRowClassName">
-			<el-table-column label="用户姓名" prop="rusername"></el-table-column>
-			<el-table-column label="用户联系方式" prop="ruserphone"></el-table-column>
-			<el-table-column label="所患疾病" prop="disease"></el-table-column>
-			<el-table-column label="医生姓名" prop="rdoctorname"></el-table-column>
-			<el-table-column label="挂号时间" prop="rtime"></el-table-column>
+			<el-table-column label="用户姓名" prop="rusername" align="center"></el-table-column>
+			<el-table-column label="用户联系方式" prop="ruserphone" align="center"></el-table-column>
+			<el-table-column label="所患疾病" prop="disease" align="center"></el-table-column>
+			<el-table-column label="医生姓名" prop="rdoctorname" align="center"></el-table-column>
+			<el-table-column label="挂号时间" prop="rtime" align="center"></el-table-column>
 
 			<el-table-column label="操作">
 				<template slot-scope="scope">

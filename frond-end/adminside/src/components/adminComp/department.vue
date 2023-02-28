@@ -9,8 +9,8 @@
 		<!-- 科室列表 -->
 		<!-- del : "1" id : 1 pname : "发热门诊" -->
 		<el-table :data="depList" border :row-class-name="tableRowClassName">
-			<el-table-column label="科室名称" prop="pname"></el-table-column>
-			<el-table-column label="操作">
+			<el-table-column label="科室名称" prop="pname" align="center"></el-table-column>
+			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
 					<el-button type="primary" @click.native="edit(scope)">编辑</el-button>
 					<el-button type="danger" @click.native="confirmDel(scope)"

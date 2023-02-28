@@ -9,15 +9,28 @@
 		<!-- uage : 18 uid : 1 uname : "54" upassword : "123456" uphone : "12312341234"
 		usex : 1 -->
 		<el-table :data="userList" border :row-class-name="tableRowClassName">
-			<el-table-column prop="uname" label="用户名"></el-table-column>
+			<el-table-column
+				prop="uname"
+				label="用户名"
+				align="center"
+			></el-table-column>
 			<el-table-column
 				prop="usex"
 				label="性别"
 				:formatter="sexFormate"
+				align="center"
 			></el-table-column>
-			<el-table-column prop="uage" label="年龄"></el-table-column>
-			<el-table-column prop="uphone" label="联系方式"></el-table-column>
-			<el-table-column label="操作">
+			<el-table-column
+				prop="uage"
+				label="年龄"
+				align="center"
+			></el-table-column>
+			<el-table-column
+				prop="uphone"
+				label="联系方式"
+				align="center"
+			></el-table-column>
+			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
 					<el-button type="primary" @click.native="edit(scope)">编辑</el-button>
 					<el-button type="danger" @click.native="confirmDel(scope)"

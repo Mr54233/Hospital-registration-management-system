@@ -3,7 +3,7 @@
 		<!-- 面包屑区域 -->
 		<el-breadcrumb separator-class="el-icon-arrow-right">
 			<el-breadcrumb-item>首页</el-breadcrumb-item>
-			<el-breadcrumb-item>挂号消息</el-breadcrumb-item>
+			<el-breadcrumb-item>挂号信息</el-breadcrumb-item>
 		</el-breadcrumb>
 		<!-- 展示用户挂号的信息 -->
 		<el-table :data="regInfo" border :row-class-name="tableRowClassName">
