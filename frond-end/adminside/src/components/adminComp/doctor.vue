@@ -12,11 +12,12 @@
 		<!-- dage : 46 del : "1" department : "发热门诊" dname : "孟子韬" dsex : "1" id :
 		1 -->
 		<el-table :data="docList" border :row-class-name="tableRowClassName">
-			<el-table-column prop="dname" label="医生姓名"></el-table-column>
+			<el-table-column prop="dname" label="医生姓名" align="center"></el-table-column>
 			<el-table-column
 				prop="dsex"
 				label="性别"
 				:formatter="sexFormate"
+				align="center"
 			></el-table-column>
 			<el-table-column prop="dage" label="年龄" align="center"></el-table-column>
 			<el-table-column prop="department" label="所属科室" align="center"></el-table-column>
